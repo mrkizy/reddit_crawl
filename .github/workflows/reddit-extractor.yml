@@ -23,8 +23,9 @@ jobs:
         id: fetch-reddit
         run: |
           # 获取Reddit热门帖子数据
-          curl -H "User-Agent: RedditExtractor/1.0" \
-            "https://www.reddit.com/r/all/hot.json?limit=25" \
+          curl -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+                -H "Accept: application/json" \
+                "https://www.reddit.com/r/all/hot.json?limit=25"
 
       - name: Extract Posts
         id: extract-posts
