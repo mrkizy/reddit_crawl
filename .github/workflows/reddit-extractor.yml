@@ -1,0 +1,41 @@
+name: Extract Reddit Top News
+
+on:
+  schedule:
+    # 每天17:00 UTC执行（北京时间是UTC+8，所以17:00 UTC = 01:00 北京时间）
+    # 如果需要北京时间17:00，则设置为 09:00 UTC
+    - cron: '0 9 * * *'  # 北京时间17:00
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Fetch Reddit Data
+        id: fetch-reddit
+        run: |
+          # 获取Reddit热门帖子数据
+          curl -H "User-Agent: RedditExtractor/1.0" \
+            "https://www.reddit.com/r/all/hot.json?limit=25" \
+            -o reddit_data.json
+
+      - name: Extract Posts
+        id: extract-posts
+        run: |
+          node extract_reddit_posts.js
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add reddit_top_news.json
+          git diff --staged --quiet || git commit -m "Update Reddit top news - $(date +'%Y-%m-%d %H:%M:%S')"
+          git push
