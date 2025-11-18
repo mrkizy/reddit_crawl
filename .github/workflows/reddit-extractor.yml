@@ -25,7 +25,6 @@ jobs:
           # 获取Reddit热门帖子数据
           curl -H "User-Agent: RedditExtractor/1.0" \
             "https://www.reddit.com/r/all/hot.json?limit=25" \
-            -o reddit_data.json
 
       - name: Extract Posts
         id: extract-posts
