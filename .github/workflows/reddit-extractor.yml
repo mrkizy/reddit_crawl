@@ -22,10 +22,8 @@ jobs:
       - name: Fetch Reddit Data
         id: fetch-reddit
         run: |
-          # 获取Reddit热门帖子数据
-          wget -O - -q \
-              --header="Accept: application/json" \
-              "https://www.reddit.com/r/all/hot.json?limit=25"
+          # 获取Reddit热门帖子数据  
+          curl -H "User-Agent: RedditExtractor/1.0" https://www.reddit.com/r/all/hot.json
 
       - name: Extract Posts
         id: extract-posts
